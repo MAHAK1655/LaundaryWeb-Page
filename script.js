@@ -8,26 +8,22 @@ function scrollToBooking() {
 }
 
 function addToCart(serviceId, serviceName, price) {
-  if (cart[serviceId]) {
-    cart[serviceId].quantity += 1;
-  } else {
+  // Only add if not already in cart (one-time add only)
+  if (!cart[serviceId]) {
     cart[serviceId] = {
       name: serviceName,
       price: price,
       quantity: 1
     };
+    updateCartDisplay();
+    updateButtonVisibility(serviceId); // Update button visibility
   }
-  updateCartDisplay();
-  updateButtonVisibility(serviceId); // Update button visibility
 }
 
 function removeFromCart(serviceId) {
+  // Complete removal (no quantity decrease, just remove entirely)
   if (cart[serviceId]) {
-    if (cart[serviceId].quantity > 1) {
-      cart[serviceId].quantity -= 1;
-    } else {
-      delete cart[serviceId];
-    }
+    delete cart[serviceId];
     updateCartDisplay();
     updateButtonVisibility(serviceId); // Update button visibility
   }
@@ -88,7 +84,7 @@ function updateCartDisplay() {
         <div class="cart-item">
           <div>
             <strong>${item.name}</strong><br>
-            <small>Qty: ${item.quantity} × ₹${item.price}</small>
+            <small>₹${item.price}</small>
           </div>
           <div>₹${itemTotal}</div>
         </div>
